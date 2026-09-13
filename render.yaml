@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: status-academy-crm
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: BOT_PASSWORD
+        value: status777
+      - key: ADMIN_PASSWORD
+        value: admin123
+      - key: DEADLINE_ISO
+        value: 2026-09-16T17:42:00
+      - key: TELEGRAM_BOT_TOKEN
+        value: 8778141953:AAEmTELu0FHT9C9xfGNfWL9kqkKt8ksbMCI
+      - key: TELEGRAM_CHAT_ID
+        value: 8776288263
