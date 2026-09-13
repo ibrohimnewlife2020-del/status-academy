@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@700;800;900&display=swap');
+
+:root {
+  --bg-pure-black: #000000;
+  --bg-card-dark: #0f0f0f;
+  --bg-card-hover: #171717;
+  --border-dark: #262626;
+  --brand-red: #ff1e27;
+  --brand-red-dark: #b91c1c;
+  --glow-red: rgba(255, 30, 39, 0.45);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #050505;
+  color: #ffffff;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+.mono-num {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Red & Black Countdown Timer */
+.timer-container {
+  background: radial-gradient(circle at 50% 0%, #200508 0%, #080808 100%);
+  border: 2px solid #ff1e27;
+  box-shadow: 0 0 35px rgba(255, 30, 39, 0.35), inset 0 0 20px rgba(255, 30, 39, 0.15);
+}
+
+.timer-box-single {
+  background: #000000;
+  border: 1px solid #ff1e27;
+  box-shadow: 0 0 20px rgba(255, 30, 39, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.timer-box-single:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(255, 30, 39, 0.5);
+}
+
+.timer-number {
+  color: #ff2a34;
+  text-shadow: 0 0 15px rgba(255, 42, 52, 0.8), 0 0 30px rgba(255, 42, 52, 0.4);
+}
+
+/* Pulsing Badge & Rings */
+@keyframes red-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 30, 39, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(255, 30, 39, 0);
+  }
+}
+
+.pulse-red-glow {
+  animation: red-pulse 2s infinite;
+}
+
+@keyframes live-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.live-indicator {
+  animation: live-dot 1.2s infinite ease-in-out;
+}
+
+/* Gradient Texts */
+.text-red-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #ff6b72 40%, #ff1e27 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-status-red {
+  background: linear-gradient(135deg, #ff333d 0%, #e50914 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Card Styling */
+.status-card {
+  background: #0d0d0d;
+  border: 1px solid #222222;
+  transition: all 0.3s ease;
+}
+
+.status-card:hover {
+  border-color: #ff1e27;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px -10px rgba(255, 30, 39, 0.3);
+}
+
+/* CTA Button */
+.btn-status-red {
+  background: linear-gradient(135deg, #ff1e27 0%, #c40e16 100%);
+  box-shadow: 0 0 25px rgba(255, 30, 39, 0.45);
+  transition: all 0.25s ease;
+}
+
+.btn-status-red:hover {
+  background: linear-gradient(135deg, #ff3840 0%, #d8141d 100%);
+  box-shadow: 0 0 40px rgba(255, 30, 39, 0.7);
+  transform: translateY(-2px);
+}
+
+.btn-status-red:active {
+  transform: translateY(0);
+}
+
+/* Form Input */
+.status-input {
+  background: #000000;
+  border: 1.5px solid #262626;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.status-input:focus {
+  border-color: #ff1e27;
+  box-shadow: 0 0 0 3px rgba(255, 30, 39, 0.25);
+  outline: none;
+}

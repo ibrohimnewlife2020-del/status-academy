@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STATUS ACADEMY — Lidlar Boshqaruv Paneli</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-black text-gray-100 min-h-screen antialiased">
+
+  <!-- LOGIN EKRANI (Parol so'raladi) -->
+  <div id="loginScreen" class="fixed inset-0 bg-black z-50 flex items-center justify-center p-4">
+    <div class="bg-[#0e0e0e] border-2 border-[#ff1e27]/60 rounded-3xl p-8 max-w-md w-full shadow-2xl shadow-red-950/60">
+      <div class="text-center mb-6">
+        <div class="bg-white p-2 rounded-2xl inline-block shadow-lg mb-3">
+          <img src="images/logo.png" alt="STATUS ACADEMY" class="h-10 w-auto">
+        </div>
+        <h2 class="text-2xl font-black text-white">STATUS ACADEMY</h2>
+        <p class="text-neutral-400 text-xs mt-1">Lidlar paneliga kirish uchun parolni kiriting</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Admin Parol:</label>
+          <input 
+            type="password" 
+            id="adminPasswordInput" 
+            required 
+            placeholder="Standart: admin123" 
+            class="w-full bg-black border border-neutral-700 focus:border-[#ff1e27] rounded-xl px-4 py-3 text-white outline-none"
+          >
+        </div>
+        <div id="loginError" class="hidden text-red-500 text-xs font-semibold"></div>
+        <button 
+          type="submit" 
+          class="w-full btn-status-red text-white font-bold py-3 rounded-xl transition cursor-pointer"
+        >
+          Tizimga Kirish
+        </button>
+      </form>
+      <div class="mt-4 text-center">
+        <a href="./" class="text-xs text-neutral-500 hover:text-white transition">← Saytga qaytish</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASOSIY ADMIN DASHBOARD -->
+  <div id="adminApp" class="hidden min-h-screen flex flex-col">
+    
+    <!-- Top Nav -->
+    <header class="bg-[#0a0a0a] border-b border-neutral-800 sticky top-0 z-30 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="bg-white p-1 rounded-xl shadow-md">
+            <img src="images/logo.png" alt="STATUS ACADEMY" class="h-8 w-auto">
+          </div>
+          <div>
+            <h1 class="text-base sm:text-lg font-black text-white leading-tight">STATUS ACADEMY</h1>
+            <p class="text-[11px] text-neutral-400">42% Grant bo'yicha tushgan lidlar</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="./" target="_blank" class="text-xs text-neutral-300 hover:text-white bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <span class="hidden sm:inline">Saytni Ko'rish</span>
+          </a>
+          <button onclick="logoutAdmin()" class="text-xs text-red-400 hover:text-white bg-red-950/40 hover:bg-red-900 border border-red-800/50 px-3 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Chiqish</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+      
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <!-- Card 1 -->
+        <div class="bg-[#0d0d0d] border border-neutral-800 rounded-2xl p-5">
+          <div class="flex items-center justify-between text-neutral-400 text-xs mb-2">
+            <span>Jami O'quvchilar</span>
+            <i class="fa-solid fa-users text-blue-400 text-base"></i>
+          </div>
+          <div id="statTotal" class="text-3xl font-black text-white">0</div>
+          <span class="text-[11px] text-neutral-500 mt-1 block">Barcha ro'yxatdan o'tganlar</span>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-[#0d0d0d] border border-neutral-800 rounded-2xl p-5">
+          <div class="flex items-center justify-between text-neutral-400 text-xs mb-2">
+            <span>Bugungi Lidlar</span>
+            <i class="fa-solid fa-calendar-day text-amber-400 text-base"></i>
+          </div>
+          <div id="statToday" class="text-3xl font-black text-amber-400">0</div>
+          <span class="text-[11px] text-neutral-500 mt-1 block">Oxirgi 24 soatda</span>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-[#0d0d0d] border border-red-600/50 rounded-2xl p-5">
+          <div class="flex items-center justify-between text-red-400 text-xs mb-2">
+            <span>Yangi Lidlar</span>
+            <i class="fa-solid fa-bell text-[#ff1e27] text-base animate-pulse"></i>
+          </div>
+          <div id="statNew" class="text-3xl font-black text-[#ff1e27]">0</div>
+          <span class="text-[11px] text-red-400/80 mt-1 block">Qo'ng'iroq qilinishi kerak</span>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-[#0d0d0d] border border-neutral-800 rounded-2xl p-5">
+          <div class="flex items-center justify-between text-emerald-400 text-xs mb-2">
+            <span>Bog'lanilganlar</span>
+            <i class="fa-solid fa-check-double text-emerald-400 text-base"></i>
+          </div>
+          <div id="statContacted" class="text-3xl font-black text-emerald-400">0</div>
+          <span class="text-[11px] text-neutral-500 mt-1 block">Aloqa o'rnatilgan arizalar</span>
+        </div>
+      </div>
+
+      <!-- Telegram Bot Info Banner -->
+      <div class="bg-gradient-to-r from-neutral-900 via-[#150305] to-neutral-900 border border-[#ff1e27]/30 rounded-2xl p-4 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl flex-shrink-0">
+            <i class="fa-brands fa-telegram"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white">Telegram orqali yangi lidlarni olish</h3>
+            <p class="text-xs text-neutral-400">O'quvchi ariza topshirgan soniyadayoq xabar sizning Telegramingizga kelishi mumkin.</p>
+          </div>
+        </div>
+        <button onclick="toggleTelegramGuide()" class="text-xs bg-[#ff1e27] hover:bg-red-600 text-white font-bold px-4 py-2 rounded-xl transition cursor-pointer">
+          Qo'llanmani ochish
+        </button>
+      </div>
+
+      <!-- Telegram Setup Modal/Drawer -->
+      <div id="telegramGuideModal" class="hidden bg-[#0d0d0d] border border-neutral-700 rounded-2xl p-6 mb-8 text-sm">
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="font-bold text-white text-base flex items-center gap-2">
+            <i class="fa-brands fa-telegram text-blue-400"></i> Telegram Botni Ulash Bo'yicha 2 Qadamli Qo'llanma
+          </h4>
+          <button onclick="toggleTelegramGuide()" class="text-neutral-400 hover:text-white cursor-pointer">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <ol class="list-decimal list-inside space-y-2 text-neutral-300 text-xs sm:text-sm">
+          <li>Telegramda <strong>@BotFather</strong> ga kiring, <code>/newbot</code> buyrug'i orqali yangi bot oching va <strong>TOKEN</strong> ni oling.</li>
+          <li>O'z chat ID ingizni bilish uchun <strong>@userinfobot</strong> ga <code>/start</code> yuboring va ID raqamingizni oling.</li>
+          <li>Loyiha ichidagi <code>.env</code> fayliga quyidagicha yozib qo'ying:
+            <pre class="bg-black p-3 rounded-lg mt-1 text-emerald-400 font-mono text-xs overflow-x-auto">TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjkl...
+TELEGRAM_CHAT_ID=987654321</pre>
+          </li>
+          <li>Serverni qayta ishga tushiring: har bir yangi lid avtomatik ravishda bot orqali sizga yuboriladi!</li>
+        </ol>
+      </div>
+
+      <!-- Table Header & Actions -->
+      <div class="bg-[#0d0d0d] border border-neutral-800 rounded-2xl p-4 mb-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <!-- Search & Filter -->
+        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          <!-- Search -->
+          <div class="relative flex-1 sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 text-xs"></i>
+            <input 
+              type="text" 
+              id="searchInput" 
+              oninput="filterLeads()" 
+              placeholder="Ism yoki telefon bo'yicha qidiruv..." 
+              class="w-full bg-black border border-neutral-800 focus:border-[#ff1e27] rounded-xl pl-9 pr-3 py-2 text-xs text-white outline-none"
+            >
+          </div>
+
+          <!-- Status Filter -->
+          <select 
+            id="statusFilter" 
+            onchange="filterLeads()" 
+            class="bg-black border border-neutral-800 focus:border-[#ff1e27] rounded-xl px-3 py-2 text-xs text-neutral-300 outline-none cursor-pointer"
+          >
+            <option value="all">Barcha Statuslar</option>
+            <option value="yangi">Faqat Yangilar</option>
+            <option value="boglanildi">Bog'lanilganlar</option>
+            <option value="tolov_qildi">To'lov qilganlar</option>
+            <option value="bekor_qilindi">Bekor qilinganlar</option>
+          </select>
+        </div>
+
+        <!-- Export & Refresh -->
+        <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+          <button 
+            onclick="loadLeads()" 
+            class="bg-neutral-900 hover:bg-neutral-800 text-neutral-300 px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition cursor-pointer border border-neutral-800"
+          >
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Yangilash</span>
+          </button>
+
+          <button 
+            onclick="exportToCSV()" 
+            class="bg-emerald-700 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition shadow-md cursor-pointer"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            <span>Excel / CSV Yuklab Olish</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Leads Table -->
+      <div class="bg-[#0d0d0d] border border-neutral-800 rounded-2xl overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-neutral-300">
+            <thead class="bg-black text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
+              <tr>
+                <th class="py-3.5 px-4">Lid ID</th>
+                <th class="py-3.5 px-4">Sana va Vaqt</th>
+                <th class="py-3.5 px-4">O'quvchi Ismi</th>
+                <th class="py-3.5 px-4">Telefon Raqami</th>
+                <th class="py-3.5 px-4">Tanlangan Kurs</th>
+                <th class="py-3.5 px-4">Status</th>
+                <th class="py-3.5 px-4 text-center">Amallar</th>
+              </tr>
+            </thead>
+            <tbody id="leadsTableBody" class="divide-y divide-neutral-900">
+              <tr>
+                <td colspan="7" class="py-8 text-center text-neutral-500">
+                  <i class="fa-solid fa-circle-notch fa-spin text-lg mr-2"></i> Lidlar yuklanmoqda...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-neutral-900 py-4 text-center text-xs text-neutral-500">
+      STATUS ACADEMY — O'quvchilar Lidlarini Boshqarish Tizimi (+998-97-821-30-30)
+    </footer>
+
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

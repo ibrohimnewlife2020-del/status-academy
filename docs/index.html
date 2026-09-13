@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STATUS ACADEMY — 42% Grant Aksiyasi | Ingliz Tili Markazi</title>
+  <meta name="description" content="Status Academy ingliz tili o'quv markazi. 16-sentabr 17:42 gacha ro'yxatdan o'tganlarga 42% grant beriladi! Telefon: +998-97-821-30-30">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#ff1e27',
+              darkRed: '#b91c1c',
+              black: '#050505',
+              card: '#0d0d0d'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-black text-white antialiased selection:bg-[#ff1e27] selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- 1. ENG YUQORI QISM: JONLI VAQT VA SANA + 42% GRANT XABARI -->
+  <!-- ======================================================== -->
+  <header class="bg-[#0f0003] border-b border-[#ff1e27]/40 sticky top-0 z-50 backdrop-blur-lg">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-between text-xs sm:text-sm gap-2">
+      <!-- Live Clock & Date -->
+      <div id="liveClock" class="flex items-center gap-2 text-gray-300">
+        <!-- JS orqali to'ldiriladi -->
+        <span class="inline-flex items-center gap-1.5 text-red-500 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-red-500 live-indicator"></span>
+          Vaqt yuklanmoqda...
+        </span>
+      </div>
+
+      <!-- Urgent announcement -->
+      <div class="flex items-center gap-2 text-center text-gray-200">
+        <span class="bg-[#ff1e27] text-white text-[10px] sm:text-xs font-black uppercase px-2.5 py-0.5 rounded-full pulse-red-glow">
+          Aksiya
+        </span>
+        <span class="font-medium text-xs sm:text-sm">
+          16-sentabr 17:42 gacha ro'yxatdan o'tganlarga <strong class="text-[#ff2a34] font-black underline">42% GRANT</strong> beriladi!
+        </span>
+      </div>
+
+      <!-- Phone header shortcut -->
+      <div class="hidden md:flex items-center gap-2">
+        <a href="tel:+998978213030" class="text-white hover:text-red-400 font-bold font-mono text-xs flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-phone text-red-500"></i>
+          <span>+998-97-821-30-30</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR: LOGO VA ALOQA -->
+  <nav class="bg-black/90 border-b border-neutral-900 sticky top-[41px] z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      
+      <!-- LOGO: STATUS ACADEMY -->
+      <a href="./" class="flex items-center gap-3 group">
+        <div class="bg-white p-1 rounded-xl shadow-lg shadow-red-900/20 border border-neutral-700 flex items-center justify-center">
+          <img src="images/logo.png" alt="STATUS ACADEMY" class="h-10 sm:h-12 w-auto object-contain">
+        </div>
+        <div class="flex flex-col">
+          <span class="text-lg sm:text-xl font-black tracking-wider text-white group-hover:text-red-500 transition">
+            STATUS <span class="text-[#ff1e27]">ACADEMY</span>
+          </span>
+          <span class="text-[10px] text-gray-400 tracking-widest uppercase font-semibold">Ingliz Tili Markazi</span>
+        </div>
+      </a>
+
+      <!-- SOCIAL / CONTACT BUTTONS -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <!-- Telegram Link -->
+        <a 
+          href="https://t.me/Status4cademy" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="bg-neutral-900 hover:bg-[#ff1e27] text-gray-300 hover:text-white px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-800 hover:border-red-500 transition flex items-center gap-1.5"
+          title="Telegram Kanal"
+        >
+          <i class="fa-brands fa-telegram text-blue-400 group-hover:text-white text-sm"></i>
+          <span class="hidden sm:inline">Telegram</span>
+        </a>
+
+        <!-- Instagram Link -->
+        <a 
+          href="https://www.instagram.com/status_academy_?stkn=bmhndzBjN29zOHFq" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="bg-neutral-900 hover:bg-[#ff1e27] text-gray-300 hover:text-white px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-800 hover:border-red-500 transition flex items-center gap-1.5"
+          title="Instagram Sahifa"
+        >
+          <i class="fa-brands fa-instagram text-pink-500 group-hover:text-white text-sm"></i>
+          <span class="hidden sm:inline">Instagram</span>
+        </a>
+
+        <!-- Call CTA -->
+        <a 
+          href="tel:+998978213030" 
+          class="btn-status-red text-white text-xs sm:text-sm font-bold px-4 py-2 rounded-xl flex items-center gap-2"
+        >
+          <i class="fa-solid fa-phone"></i>
+          <span class="hidden md:inline">+998-97-821-30-30</span>
+          <span class="md:hidden">Qo'ng'iroq</span>
+        </a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ======================================================== -->
+  <!-- 2. HERO SECTION + KATTA QIZIL ORQAGA SANASH TAYMERI -->
+  <!-- ======================================================== -->
+  <section class="relative pt-10 pb-16 overflow-hidden">
+    <!-- Red ambient glow background -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[650px] h-[400px] bg-red-600/15 rounded-full blur-[140px] pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 text-center">
+
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 bg-[#1a0003] border border-[#ff1e27]/50 px-4 py-1.5 rounded-full text-red-300 text-xs sm:text-sm font-bold mb-6">
+        <span class="w-2 h-2 rounded-full bg-[#ff1e27] live-indicator"></span>
+        <i class="fa-solid fa-bolt text-yellow-400"></i>
+        <span>MAXSUS GRANT DASTURI — STATUS ACADEMY</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-4">
+        Ingliz Tilida Erkin Gapiring Va <br class="hidden sm:inline">
+        <span class="text-status-red">42% Grant</span> Sohibiga Aylaning!
+      </h1>
+
+      <!-- Short & Punchy Subtitle -->
+      <p class="max-w-2xl mx-auto text-gray-300 text-sm sm:text-base lg:text-lg mb-10 leading-relaxed font-normal">
+        <strong class="text-white">16-sentabr soat 17:42 gacha</strong> ro'yxatdan o'ting va barcha o'quv dasturlarimizga <strong class="text-[#ff2a34]">42% grant</strong> bilan qabul qilining!
+      </p>
+
+      <!-- ======================================================== -->
+      <!-- KATTA QIZIL ORQAGA SANASH TAYMERI -->
+      <!-- ======================================================== -->
+      <div class="max-w-3xl mx-auto mb-12">
+        <div class="p-6 sm:p-8 rounded-3xl timer-container relative">
+          
+          <!-- Timer Header -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 pb-4 border-b border-red-950">
+            <div class="flex items-center gap-2.5 text-[#ff2a34] font-black text-xs sm:text-sm uppercase tracking-wider">
+              <span class="w-3 h-3 rounded-full bg-[#ff1e27] live-indicator"></span>
+              <i class="fa-solid fa-stopwatch text-base"></i>
+              <span>42% Grant Yakunlanishiga Qoldi:</span>
+            </div>
+            <div class="bg-black/90 text-red-400 text-xs px-3.5 py-1.5 rounded-full border border-red-800/80 font-mono font-bold">
+              ⏰ Muddat: 16-Sentabr, 17:42
+            </div>
+          </div>
+
+          <!-- The Big Red Numbers -->
+          <div class="grid grid-cols-4 gap-2.5 sm:gap-5 text-center">
+            <!-- KUN -->
+            <div class="timer-box-single rounded-2xl p-3 sm:p-5">
+              <div id="timerDays" class="text-3xl sm:text-6xl lg:text-7xl font-black mono-num timer-number tracking-tight">00</div>
+              <span class="text-[10px] sm:text-xs font-bold uppercase text-neutral-400 tracking-wider mt-1 block">Kun</span>
+            </div>
+
+            <!-- SOAT -->
+            <div class="timer-box-single rounded-2xl p-3 sm:p-5">
+              <div id="timerHours" class="text-3xl sm:text-6xl lg:text-7xl font-black mono-num timer-number tracking-tight">00</div>
+              <span class="text-[10px] sm:text-xs font-bold uppercase text-neutral-400 tracking-wider mt-1 block">Soat</span>
+            </div>
+
+            <!-- DAQIQA -->
+            <div class="timer-box-single rounded-2xl p-3 sm:p-5">
+              <div id="timerMinutes" class="text-3xl sm:text-6xl lg:text-7xl font-black mono-num timer-number tracking-tight">00</div>
+              <span class="text-[10px] sm:text-xs font-bold uppercase text-neutral-400 tracking-wider mt-1 block">Daqiqa</span>
+            </div>
+
+            <!-- SEKUND -->
+            <div class="timer-box-single rounded-2xl p-3 sm:p-5 border-red-500">
+              <div id="timerSeconds" class="text-3xl sm:text-6xl lg:text-7xl font-black mono-num timer-number tracking-tight animate-pulse">00</div>
+              <span class="text-[10px] sm:text-xs font-bold uppercase text-[#ff2a34] tracking-wider mt-1 block">Sekund</span>
+            </div>
+          </div>
+
+          <!-- Timer Footer / Alert -->
+          <div id="urgentCountdownText" class="mt-6 pt-4 border-t border-red-950 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-neutral-300">
+            <span class="flex items-center gap-1.5">
+              <i class="fa-solid fa-users text-red-400"></i>
+              <span>Grant o'rinlari soni: <strong>50 ta nomzod</strong></span>
+            </span>
+            <span class="text-red-400 font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#ff1e27] live-indicator"></span>
+              <span>Faqat sanoqli o'rinlar qoldi!</span>
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick Scroll to Form Button -->
+      <a href="#registerSection" class="inline-flex items-center justify-center gap-3 btn-status-red text-white text-base sm:text-lg font-black px-8 py-4 rounded-2xl cursor-pointer">
+        <i class="fa-solid fa-fire text-yellow-300 text-xl"></i>
+        <span>Hoziroq Ro'yxatdan O'tish</span>
+        <i class="fa-solid fa-arrow-down text-sm"></i>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 3. BIR OZ MA'LUMOTLAR: GRANT AFZALLIKLARI (ANIQ VA QISQA) -->
+  <!-- ======================================================== -->
+  <section class="py-12 bg-[#090909] border-y border-neutral-900">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      
+      <div class="text-center mb-8">
+        <span class="text-red-500 font-bold text-xs uppercase tracking-widest bg-red-950/60 px-3 py-1 rounded-full border border-red-800/40">
+          Nega Aynan Status Academy?
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">
+          42% Grant Bilan Nimalarga Ega Bo'lasiz?
+        </h2>
+      </div>
+
+      <!-- 4 Compact, High-Impact Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Card 1 -->
+        <div class="status-card p-5 rounded-2xl">
+          <div class="w-10 h-10 rounded-xl bg-red-600/20 text-[#ff1e27] flex items-center justify-center text-xl mb-3">
+            <i class="fa-solid fa-percent"></i>
+          </div>
+          <h3 class="font-bold text-white text-base mb-1">42% Kafolatlangan Chegirma</h3>
+          <p class="text-neutral-400 text-xs leading-relaxed">
+            Butun o'quv dasturi davomida belgilangan narxga 42% lik to'liq grant kafolati.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="status-card p-5 rounded-2xl">
+          <div class="w-10 h-10 rounded-xl bg-red-600/20 text-[#ff1e27] flex items-center justify-center text-xl mb-3">
+            <i class="fa-solid fa-microphone-lines"></i>
+          </div>
+          <h3 class="font-bold text-white text-base mb-1">Native Speaking Club</h3>
+          <p class="text-neutral-400 text-xs leading-relaxed">
+            Haftasiga 2 marta chet ellik ustozlar bilan jonli va erkin muloqot klublari.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="status-card p-5 rounded-2xl">
+          <div class="w-10 h-10 rounded-xl bg-red-600/20 text-[#ff1e27] flex items-center justify-center text-xl mb-3">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <h3 class="font-bold text-white text-base mb-1">IELTS 7.5+ & Mock Test</h3>
+          <p class="text-neutral-400 text-xs leading-relaxed">
+            Har haftalik rasmiy sharoitdagi bepul sinov imtihonlari va individual tahlil.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="status-card p-5 rounded-2xl">
+          <div class="w-10 h-10 rounded-xl bg-red-600/20 text-[#ff1e27] flex items-center justify-center text-xl mb-3">
+            <i class="fa-solid fa-book-bookmark"></i>
+          </div>
+          <h3 class="font-bold text-white text-base mb-1">Bepul O'quv Darsliklari</h3>
+          <p class="text-neutral-400 text-xs leading-relaxed">
+            Cambridge va Oxford kitoblari o'quvchilarimizga mutlaqo bepul beriladi.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 4. RO'YXATDAN O'TISH FORMASI (LID YIG'ISH QISMI) -->
+  <!-- ======================================================== -->
+  <section id="registerSection" class="py-16 relative">
+    <!-- Red ambient glow -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div class="w-[500px] h-[350px] bg-red-600/10 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-xl mx-auto px-4 relative z-10">
+      
+      <!-- Lead Form Box -->
+      <div class="bg-[#0c0c0c] border-2 border-[#ff1e27] rounded-3xl p-6 sm:p-9 shadow-2xl shadow-red-950/80">
+        
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center gap-2 bg-[#200508] border border-red-800 text-red-300 text-xs font-bold uppercase px-3 py-1 rounded-full mb-3">
+            <span class="w-2 h-2 rounded-full bg-red-500 live-indicator"></span>
+            16-sentabr 17:42 gacha ochiq
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-white">
+            42% Grantni Band Qilish
+          </h2>
+          <p class="text-neutral-300 text-xs sm:text-sm mt-1.5">
+            Ism va telefoningizni yozing. Status Academy ma'muri 10 daqiqa ichida siz bilan bog'lanadi!
+          </p>
+        </div>
+
+        <!-- Error alert -->
+        <div id="formError" class="hidden bg-red-950/90 border border-red-600 text-red-200 px-4 py-3 rounded-xl text-xs font-semibold mb-4"></div>
+
+        <!-- The Registration Form -->
+        <form id="leadForm" class="space-y-4">
+          <!-- 1. Ism va Familiya -->
+          <div>
+            <label for="studentName" class="block text-xs sm:text-sm font-bold text-gray-200 mb-1">
+              <i class="fa-solid fa-user text-[#ff1e27] mr-1.5"></i> Ism va Familiyangiz:
+            </label>
+            <input 
+              type="text" 
+              id="studentName" 
+              required 
+              placeholder="Masalan: Sardor Rahimiy" 
+              class="w-full status-input rounded-xl px-4 py-3.5 text-white placeholder-neutral-600 text-sm"
+            >
+          </div>
+
+          <!-- 2. Telefon Raqami -->
+          <div>
+            <label for="studentPhone" class="block text-xs sm:text-sm font-bold text-gray-200 mb-1">
+              <i class="fa-solid fa-phone text-[#ff1e27] mr-1.5"></i> Telefon Raqamingiz:
+            </label>
+            <input 
+              type="tel" 
+              id="studentPhone" 
+              required 
+              value="+998 "
+              placeholder="+998 (97) 821-30-30" 
+              class="w-full status-input rounded-xl px-4 py-3.5 text-white font-mono placeholder-neutral-600 text-sm"
+            >
+          </div>
+
+          <!-- 3. Yo'nalish -->
+          <div>
+            <label for="studentCourse" class="block text-xs sm:text-sm font-bold text-gray-200 mb-1">
+              <i class="fa-solid fa-graduation-cap text-[#ff1e27] mr-1.5"></i> Qaysi kursga qiziqyapsiz?
+            </label>
+            <select 
+              id="studentCourse" 
+              class="w-full status-input rounded-xl px-4 py-3.5 text-white text-sm cursor-pointer"
+            >
+              <option value="IELTS Intensive (Band 7.0 - 8.5)">IELTS Intensive (Band 7.0 - 8.5)</option>
+              <option value="General English (0 dan boshlash)">General English (0 dan boshlash)</option>
+              <option value="Speaking & Pronunciation Club">Speaking & Pronunciation Club</option>
+              <option value="Kids & Teenagers English">Kids & Teenagers English</option>
+            </select>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            id="submitBtn" 
+            class="w-full btn-status-red text-white font-black text-base sm:text-lg py-4 rounded-xl flex items-center justify-center gap-3 cursor-pointer mt-2"
+          >
+            <i id="btnSpinner" class="fa-solid fa-circle-notch fa-spin hidden"></i>
+            <span id="btnText">🔥 42% GRANTNI BAND QILISH</span>
+          </button>
+
+          <p class="text-center text-[11px] text-neutral-500 pt-1 flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-lock text-emerald-500"></i>
+            <span>Ma'lumotlaringiz xavfsiz saqlanadi. Spam yo'q.</span>
+          </p>
+        </form>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 5. BOG'LANISH VA IJTIMOIY TARMOQLAR -->
+  <!-- ======================================================== -->
+  <section class="py-12 bg-[#090909] border-t border-neutral-900">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Biz Bilan Bog'laning</h3>
+      <p class="text-neutral-400 text-xs sm:text-sm mb-6">Savollaringiz bormi? Ma'murlarimiz sizga yordam berishdan mamnun!</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- Telefon -->
+        <a 
+          href="tel:+998978213030" 
+          class="status-card p-4 rounded-2xl flex items-center justify-center gap-3 hover:border-red-500 transition group"
+        >
+          <div class="w-10 h-10 rounded-xl bg-red-600/20 text-[#ff1e27] flex items-center justify-center text-lg">
+            <i class="fa-solid fa-phone"></i>
+          </div>
+          <div class="text-left">
+            <span class="text-[11px] text-neutral-500 block">Qo'ng'iroq qiling:</span>
+            <span class="text-white font-mono font-bold text-sm group-hover:text-red-400 transition">+998-97-821-30-30</span>
+          </div>
+        </a>
+
+        <!-- Telegram -->
+        <a 
+          href="https://t.me/Status4cademy" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="status-card p-4 rounded-2xl flex items-center justify-center gap-3 hover:border-blue-500 transition group"
+        >
+          <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-lg">
+            <i class="fa-brands fa-telegram"></i>
+          </div>
+          <div class="text-left">
+            <span class="text-[11px] text-neutral-500 block">Telegram Kanal:</span>
+            <span class="text-white font-bold text-sm group-hover:text-blue-400 transition">t.me/Status4cademy</span>
+          </div>
+        </a>
+
+        <!-- Instagram -->
+        <a 
+          href="https://www.instagram.com/status_academy_?stkn=bmhndzBjN29zOHFq" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="status-card p-4 rounded-2xl flex items-center justify-center gap-3 hover:border-pink-500 transition group"
+        >
+          <div class="w-10 h-10 rounded-xl bg-pink-600/20 text-pink-400 flex items-center justify-center text-lg">
+            <i class="fa-brands fa-instagram"></i>
+          </div>
+          <div class="text-left">
+            <span class="text-[11px] text-neutral-500 block">Instagram Sahifa:</span>
+            <span class="text-white font-bold text-sm group-hover:text-pink-400 transition">@status_academy_</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-black border-t border-neutral-900 py-8 text-neutral-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <div class="flex items-center gap-3">
+        <div class="bg-white p-1 rounded-lg">
+          <img src="images/logo.png" alt="STATUS ACADEMY" class="h-6 w-auto">
+        </div>
+        <div>
+          <span class="text-white font-black">STATUS ACADEMY</span>
+          <p class="text-[10px] text-neutral-500">© 2026 Barcha huquqlar himoyalangan.</p>
+        </div>
+      </div>
+
+      <div class="text-center text-neutral-500 text-[11px]">
+        16-sentabr 17:42 gacha o'tkazilayotgan 42% grant aksiyasi
+      </div>
+
+      <div>
+        <a href="admin.html" class="text-neutral-500 hover:text-red-400 text-xs flex items-center gap-1 transition">
+          <i class="fa-solid fa-lock text-[10px]"></i>
+          <span>Lidlar Admin Paneli</span>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- SUCCESS MODAL (RO'YXATDAN O'TGANDAN SO'NG KO'RINADI) -->
+  <!-- ======================================================== -->
+  <div id="successModal" class="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4 hidden">
+    <div class="bg-[#0d0d0d] border-2 border-[#ff1e27] rounded-3xl p-6 sm:p-8 max-w-md w-full text-center relative shadow-2xl shadow-red-950">
+      
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-lg cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="w-16 h-16 rounded-2xl bg-red-600/20 border border-red-500/50 text-[#ff1e27] text-3xl flex items-center justify-center mx-auto mb-4 animate-bounce">
+        <i class="fa-solid fa-trophy text-yellow-400"></i>
+      </div>
+
+      <div class="bg-red-950/80 border border-red-800 text-red-300 text-[11px] font-black uppercase px-3 py-1 rounded-full inline-block mb-3">
+        42% Grant Muvaffaqiyatli Band Qilindi!
+      </div>
+
+      <h3 class="text-xl sm:text-2xl font-black text-white mb-2">
+        Tabriklaymiz, <span id="modalStudentName" class="text-[#ff1e27]">O'quvchi</span>!
+      </h3>
+
+      <p class="text-neutral-300 text-xs sm:text-sm mb-4 leading-relaxed">
+        Siz <strong class="text-white">STATUS ACADEMY</strong> ning 16-sentabr 17:42 gacha o'tkazilayotgan aksiyasida <strong class="text-[#ff2a34] font-black">42% lik grant</strong> imtiyozini band qildingiz.
+      </p>
+
+      <div class="bg-black rounded-xl p-3 border border-neutral-800 mb-5 text-xs text-neutral-400">
+        Lid raqami: <strong id="modalLeadId" class="text-white font-mono">#LID-000000</strong><br>
+        <span class="text-emerald-400 font-semibold">Ma'murimiz 10 daqiqa ichida siz bilan bog'lanadi!</span>
+      </div>
+
+      <button onclick="closeModal()" class="w-full btn-status-red text-white font-bold py-3 rounded-xl transition cursor-pointer">
+        Tushunarli, Rahmat!
+      </button>
+    </div>
+  </div>
+
+  <script src="js/telegram-config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
