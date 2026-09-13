@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>STATUS ACADEMY — Telegram Mini App CRM</title>
+  
+  <!-- Telegram Web App SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #070707;
+      color: #ffffff;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .card-glass {
+      background: #111111;
+      border: 1px solid #222222;
+    }
+    .card-glass:hover {
+      border-color: #ff1e27;
+    }
+    .pill-active {
+      background: #ff1e27 !important;
+      color: #ffffff !important;
+      border-color: #ff1e27 !important;
+      box-shadow: 0 0 15px rgba(255, 30, 39, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-[#070707] text-gray-100 min-h-screen pb-10">
+
+  <!-- TOP HEADER (Telegram App Bar) -->
+  <header class="bg-black/90 border-b border-neutral-800 sticky top-0 z-40 backdrop-blur-md px-4 py-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="bg-white p-1 rounded-lg">
+          <img src="images/logo.png" alt="STATUS" class="h-6 w-auto">
+        </div>
+        <div>
+          <h1 class="text-sm font-black text-white leading-tight">STATUS ACADEMY</h1>
+          <p class="text-[10px] text-neutral-400 font-semibold">CRM Mini App • 42% Grant</p>
+        </div>
+      </div>
+
+      <button onclick="loadLeads()" class="w-8 h-8 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-300 flex items-center justify-center active:scale-95 transition">
+        <i id="refreshIcon" class="fa-solid fa-arrows-rotate text-xs"></i>
+      </button>
+    </div>
+
+    <!-- Stats summary badges (Swipeable) -->
+    <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pt-3 pb-1 text-xs">
+      <div class="bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-1.5 flex-shrink-0">
+        <span class="text-neutral-400 text-[10px]">Jami:</span>
+        <strong id="statTotal" class="text-white font-bold ml-1">0</strong>
+      </div>
+      <div class="bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-1.5 flex-shrink-0">
+        <span class="text-yellow-400 text-[10px]">🟡 Yangi:</span>
+        <strong id="statNew" class="text-white font-bold ml-1">0</strong>
+      </div>
+      <div class="bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-1.5 flex-shrink-0">
+        <span class="text-blue-400 text-[10px]">⏳ O'ylayapti:</span>
+        <strong id="statOylab" class="text-white font-bold ml-1">0</strong>
+      </div>
+      <div class="bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-1.5 flex-shrink-0">
+        <span class="text-amber-400 text-[10px]">📵 Javobsiz:</span>
+        <strong id="statJavob" class="text-white font-bold ml-1">0</strong>
+      </div>
+      <div class="bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-1.5 flex-shrink-0">
+        <span class="text-emerald-400 text-[10px]">🎓 O'quvchi:</span>
+        <strong id="statOquvchi" class="text-white font-bold ml-1">0</strong>
+      </div>
+      <div class="bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-1.5 flex-shrink-0">
+        <span class="text-red-400 text-[10px]">❌ Rad:</span>
+        <strong id="statRad" class="text-white font-bold ml-1">0</strong>
+      </div>
+    </div>
+  </header>
+
+  <!-- SEARCH & FILTER TABS -->
+  <div class="px-4 pt-3 pb-2 sticky top-[95px] z-30 bg-[#070707]/95 backdrop-blur-md">
+    <!-- Search bar -->
+    <div class="relative mb-2.5">
+      <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 text-xs"></i>
+      <input 
+        type="text" 
+        id="searchInput" 
+        oninput="filterLeads()" 
+        placeholder="Ism yoki telefon qidirish..." 
+        class="w-full bg-[#141414] border border-neutral-800 focus:border-[#ff1e27] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-neutral-500 outline-none"
+      >
+    </div>
+
+    <!-- Filter Pills -->
+    <div class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar text-xs">
+      <button onclick="setFilter('all')" id="filter-all" class="filter-pill pill-active px-3 py-1.5 rounded-xl border border-neutral-800 font-bold flex-shrink-0 transition">
+        Barchasi
+      </button>
+      <button onclick="setFilter('yangi')" id="filter-yangi" class="filter-pill bg-neutral-900 text-neutral-300 px-3 py-1.5 rounded-xl border border-neutral-800 font-bold flex-shrink-0 transition">
+        🟡 Yangilar
+      </button>
+      <button onclick="setFilter('oylab')" id="filter-oylab" class="filter-pill bg-neutral-900 text-neutral-300 px-3 py-1.5 rounded-xl border border-neutral-800 font-bold flex-shrink-0 transition">
+        ⏳ O'ylab ko'radi
+      </button>
+      <button onclick="setFilter('javob')" id="filter-javob" class="filter-pill bg-neutral-900 text-neutral-300 px-3 py-1.5 rounded-xl border border-neutral-800 font-bold flex-shrink-0 transition">
+        📵 Javob bermadi
+      </button>
+      <button onclick="setFilter('oquvchi')" id="filter-oquvchi" class="filter-pill bg-neutral-900 text-neutral-300 px-3 py-1.5 rounded-xl border border-neutral-800 font-bold flex-shrink-0 transition">
+        🎓 O'quvchi bo'ldi
+      </button>
+      <button onclick="setFilter('rad')" id="filter-rad" class="filter-pill bg-neutral-900 text-neutral-300 px-3 py-1.5 rounded-xl border border-neutral-800 font-bold flex-shrink-0 transition">
+        ❌ Rad etdi
+      </button>
+    </div>
+  </div>
+
+  <!-- LEADS CONTAINER -->
+  <main class="px-4 pt-2">
+    <div id="leadsList" class="space-y-3">
+      <div class="py-12 text-center text-neutral-500 text-xs">
+        <i class="fa-solid fa-circle-notch fa-spin text-xl text-[#ff1e27] mb-2 block"></i>
+        Lidlar yuklanmoqda...
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Telegram Web App SDK init
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+      try {
+        window.Telegram.WebApp.setHeaderColor('#000000');
+        window.Telegram.WebApp.setBackgroundColor('#070707');
+      } catch (e) {}
+    }
+
+    function triggerHaptic() {
+      try {
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+          window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+        }
+      } catch (e) {}
+    }
+
+    let allLeads = [];
+    let currentFilter = 'all';
+
+    const STATUS_MAP = {
+      'yangi': { label: '🟡 Yangi', bg: 'bg-yellow-500/20', text: 'text-yellow-400', border: 'border-yellow-500/40' },
+      'oylab': { label: "⏳ O'ylab ko'radi", bg: 'bg-blue-500/20', text: 'text-blue-400', border: 'border-blue-500/40' },
+      'javob': { label: '📵 Javob bermadi', bg: 'bg-amber-500/20', text: 'text-amber-400', border: 'border-amber-500/40' },
+      'oquvchi': { label: "🎓 O'quvchi bo'ldi", bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/40' },
+      'rad': { label: '❌ Rad etdi', bg: 'bg-red-500/20', text: 'text-red-400', border: 'border-red-500/40' }
+    };
+
+    async function loadLeads() {
+      const icon = document.getElementById('refreshIcon');
+      if (icon) icon.classList.add('fa-spin');
+
+      try {
+        const res = await fetch('/api/leads', {
+          headers: { 'Authorization': 'Bearer admin123' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          allLeads = data.leads || [];
+          localStorage.setItem('status_academy_leads', JSON.stringify(allLeads));
+          updateStats();
+          filterLeads();
+        } else {
+          throw new Error('Yuklab bo\'lmadi');
+        }
+      } catch (err) {
+        // Fallback to local storage if offline
+        const local = JSON.parse(localStorage.getItem('status_academy_leads') || '[]');
+        if (local.length > 0) {
+          allLeads = local;
+          updateStats();
+          filterLeads();
+        } else {
+          document.getElementById('leadsList').innerHTML = `
+            <div class="py-10 text-center text-neutral-500 text-xs">
+              <i class="fa-solid fa-cloud-bolt text-2xl mb-2 block text-neutral-600"></i>
+              Lidlarni yuklashda xatolik. Qaytadan urinib ko'ring.
+            </div>
+          `;
+        }
+      } finally {
+        if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 600);
+      }
+    }
+
+    function updateStats() {
+      const total = allLeads.length;
+      const yangi = allLeads.filter(l => !l.status || l.status === 'yangi').length;
+      const oylab = allLeads.filter(l => l.status === 'oylab').length;
+      const javob = allLeads.filter(l => l.status === 'javob').length;
+      const oquvchi = allLeads.filter(l => l.status === 'oquvchi').length;
+      const rad = allLeads.filter(l => l.status === 'rad').length;
+
+      document.getElementById('statTotal').innerText = total;
+      document.getElementById('statNew').innerText = yangi;
+      document.getElementById('statOylab').innerText = oylab;
+      document.getElementById('statJavob').innerText = javob;
+      document.getElementById('statOquvchi').innerText = oquvchi;
+      document.getElementById('statRad').innerText = rad;
+    }
+
+    function setFilter(filter) {
+      triggerHaptic();
+      currentFilter = filter;
+      document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('pill-active'));
+      const activeBtn = document.getElementById('filter-' + filter);
+      if (activeBtn) activeBtn.classList.add('pill-active');
+      filterLeads();
+    }
+
+    function filterLeads() {
+      const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+
+      const filtered = allLeads.filter(lead => {
+        const matchesQuery = 
+          (lead.name || '').toLowerCase().includes(query) ||
+          (lead.phone || '').includes(query) ||
+          (lead.id || '').toLowerCase().includes(query);
+
+        const status = lead.status || 'yangi';
+        const matchesFilter = (currentFilter === 'all') || (status === currentFilter);
+
+        return matchesQuery && matchesFilter;
+      });
+
+      renderLeads(filtered);
+    }
+
+    function renderLeads(leads) {
+      const container = document.getElementById('leadsList');
+      if (leads.length === 0) {
+        container.innerHTML = `
+          <div class="py-12 text-center text-neutral-500 text-xs">
+            <i class="fa-regular fa-folder-open text-3xl mb-2 block text-neutral-600"></i>
+            Bu bo'limda hech qanday lid topilmadi.
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      leads.forEach(lead => {
+        const stKey = lead.status || 'yangi';
+        const st = STATUS_MAP[stKey] || STATUS_MAP['yangi'];
+        const cleanPhone = (lead.phone || '').replace(/\D/g, '');
+
+        html += `
+          <div class="card-glass rounded-2xl p-4 shadow-lg transition">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-2 pb-2 border-b border-neutral-800/80">
+              <span class="font-mono text-[11px] text-neutral-400 font-bold">#${escapeHtml(lead.id || '')}</span>
+              <span class="text-[10px] text-neutral-400">${escapeHtml(lead.createdAtFormatted || lead.createdAt?.slice(0, 16) || '')}</span>
+            </div>
+
+            <!-- Student Name & Course -->
+            <div class="mb-3">
+              <h3 class="font-extrabold text-white text-base leading-snug">${escapeHtml(lead.name || '')}</h3>
+              <div class="inline-flex items-center gap-1 bg-neutral-900 px-2.5 py-0.5 rounded-md text-[11px] text-neutral-300 font-medium border border-neutral-800 mt-1">
+                <i class="fa-solid fa-graduation-cap text-[#ff1e27] text-[10px]"></i>
+                <span>${escapeHtml(lead.course || 'Umumiy')}</span>
+              </div>
+            </div>
+
+            <!-- Current Status Badge -->
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <div class="inline-flex items-center gap-1.5 ${st.bg} ${st.text} border ${st.border} px-3 py-1 rounded-xl text-xs font-bold">
+                <span>${st.label}</span>
+              </div>
+
+              <!-- Call & Telegram Quick Links -->
+              <div class="flex items-center gap-2">
+                <a href="tel:${lead.phone}" onclick="triggerHaptic()" class="w-8 h-8 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center text-xs shadow-md active:scale-95 transition" title="Qo'ng'iroq qilish">
+                  <i class="fa-solid fa-phone"></i>
+                </a>
+                <a href="https://t.me/+${cleanPhone}" target="_blank" onclick="triggerHaptic()" class="w-8 h-8 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center text-xs shadow-md active:scale-95 transition" title="Telegram">
+                  <i class="fa-brands fa-telegram"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Status Buttons (One tap change) -->
+            <div class="pt-2 border-t border-neutral-800/80">
+              <span class="text-[10px] text-neutral-400 font-semibold mb-1.5 block">Holatni o'zgartirish:</span>
+              <div class="grid grid-cols-2 gap-1.5 text-xs">
+                <button onclick="changeStatus('${lead.id}', 'oylab')" class="bg-[#181818] hover:bg-neutral-800 active:bg-neutral-700 py-1.5 px-2 rounded-xl text-[11px] font-semibold text-neutral-200 border border-neutral-800 flex items-center justify-center gap-1">
+                  <span>⏳ O'ylab ko'radi</span>
+                </button>
+                <button onclick="changeStatus('${lead.id}', 'javob')" class="bg-[#181818] hover:bg-neutral-800 active:bg-neutral-700 py-1.5 px-2 rounded-xl text-[11px] font-semibold text-neutral-200 border border-neutral-800 flex items-center justify-center gap-1">
+                  <span>📵 Javob bermadi</span>
+                </button>
+                <button onclick="changeStatus('${lead.id}', 'oquvchi')" class="bg-[#181818] hover:bg-emerald-950 active:bg-emerald-900 py-1.5 px-2 rounded-xl text-[11px] font-bold text-emerald-300 border border-emerald-900/60 flex items-center justify-center gap-1">
+                  <span>🎓 O'quvchi bo'ldi</span>
+                </button>
+                <button onclick="changeStatus('${lead.id}', 'rad')" class="bg-[#181818] hover:bg-red-950 active:bg-red-900 py-1.5 px-2 rounded-xl text-[11px] font-bold text-red-300 border border-red-900/60 flex items-center justify-center gap-1">
+                  <span>❌ Rad etdi</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    async function changeStatus(id, newStatus) {
+      triggerHaptic();
+
+      // Mahalliy holatni yangilash
+      const lead = allLeads.find(l => l.id === id);
+      if (lead) {
+        lead.status = newStatus;
+        updateStats();
+        filterLeads();
+      }
+
+      try {
+        await fetch('/api/leads/' + id, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer admin123'
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (err) {
+        console.error('Status patch error:', err);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.innerText = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLeads();
+      // Har 15 soniyada yangilab turish
+      setInterval(loadLeads, 15000);
+    });
+  </script>
+</body>
+</html>
