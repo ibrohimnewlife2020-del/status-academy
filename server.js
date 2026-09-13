@@ -2,14 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
 require('dotenv').config();
+
+const { initTelegramBot, broadcastNewLead } = require('./telegram_crm');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
+const BOT_PASSWORD = process.env.BOT_PASSWORD || 'status777';
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8778141953:AAEmTELu0FHT9C9xfGNfWL9kqkKt8ksbMCI';
 
 // Deadline: 16-sentabr 17:42
 const DEADLINE_ISO = process.env.DEADLINE_ISO || '2026-09-16T17:42:00';
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname)); // Also serve root static files
 
 const DATA_DIR = path.join(__dirname, 'data');
 const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
@@ -50,64 +52,21 @@ function saveLeads(leads) {
   }
 }
 
-// Telegram notification function
-function sendTelegramNotification(lead) {
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-    console.log('[Telegram] Bot token yoki Chat ID sozlanmagan. Xabar konsolga chiqarilmoqda:');
-    console.log(`[Yangi Lid] Ism: ${lead.name}, Tel: ${lead.phone}, Kurs: ${lead.course || 'Tanlanmagan'}`);
-    return;
-  }
-
-  const message = `🔥 <b>STATUS ACADEMY — YANGI O'QUVCHI (42% GRANT)!</b>\n\n` +
-    `👤 <b>Ismi:</b> ${lead.name}\n` +
-    `📞 <b>Telefon:</b> <a href="tel:${lead.phone}">${lead.phone}</a>\n` +
-    `📚 <b>Yo'nalish:</b> ${lead.course || 'Umumiy'}\n` +
-    `⏰ <b>Vaqt:</b> ${lead.createdAtFormatted}\n` +
-    `🆔 <b>Lid ID:</b> #${lead.id}\n\n` +
-    `⚡️ <i>Tezda aloqaga chiqing va 42% grantni tasdiqlang! (+998-97-821-30-30)</i>`;
-
-  const payload = JSON.stringify({
-    chat_id: TELEGRAM_CHAT_ID,
-    text: message,
-    parse_mode: 'HTML'
-  });
-
-  const req = https.request(
-    `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload)
-      }
-    },
-    (res) => {
-      let body = '';
-      res.on('data', chunk => body += chunk);
-      res.on('end', () => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          console.log('[Telegram] Bildirishnoma muvaffaqiyatli yuborildi.');
-        } else {
-          console.error('[Telegram] Xatolik yuz berdi:', body);
-        }
-      });
-    }
-  );
-
-  req.on('error', (err) => {
-    console.error('[Telegram] Aloqa xatosi:', err.message);
-  });
-
-  req.write(payload);
-  req.end();
-}
+// Telegram CRM botini ishga tushirish
+initTelegramBot({
+  token: TELEGRAM_BOT_TOKEN,
+  password: BOT_PASSWORD,
+  dataDir: DATA_DIR,
+  getLeads,
+  saveLeads
+});
 
 // Public API: Get config (deadline, grant info)
 app.get('/api/config', (req, res) => {
   res.json({
     deadline: DEADLINE_ISO,
     discountPercentage: 42,
-    telegramConfigured: Boolean(TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID)
+    telegramConfigured: Boolean(TELEGRAM_BOT_TOKEN)
   });
 });
 
@@ -138,7 +97,7 @@ app.post('/api/register', (req, res) => {
     name: name.trim(),
     phone: phone.trim(),
     course: (course || 'General English').trim(),
-    status: 'yangi', // yangi | boglanildi | tolov_qildi | bekor_qilindi
+    status: 'yangi', // yangi | oylab | javob | oquvchi | rad
     createdAt: now.toISOString(),
     createdAtFormatted: formattedDate,
     ip: req.ip || req.headers['x-forwarded-for'] || '127.0.0.1'
@@ -147,8 +106,8 @@ app.post('/api/register', (req, res) => {
   leads.unshift(newLead);
   saveLeads(leads);
 
-  // Send Telegram alert
-  sendTelegramNotification(newLead);
+  // Telegram CRM botga yuborish (Inline status tugmalari bilan birga)
+  broadcastNewLead(newLead);
 
   res.status(201).json({
     success: true,
@@ -226,9 +185,10 @@ app.get('/api/stats', checkAdminAuth, (req, res) => {
   const stats = {
     total: leads.length,
     today: leads.filter(l => (l.createdAt || '').slice(0, 10) === todayStr).length,
-    new: leads.filter(l => l.status === 'yangi').length,
-    contacted: leads.filter(l => l.status === 'boglanildi').length,
-    enrolled: leads.filter(l => l.status === 'tolov_qildi').length
+    new: leads.filter(l => !l.status || l.status === 'yangi').length,
+    contacted: leads.filter(l => l.status === 'oylab' || l.status === 'javob').length,
+    enrolled: leads.filter(l => l.status === 'oquvchi').length,
+    rejected: leads.filter(l => l.status === 'rad').length
   };
 
   res.json({ success: true, stats });
@@ -238,9 +198,9 @@ app.get('/api/stats', checkAdminAuth, (req, res) => {
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`=================================================`);
-    console.log(`🚀 O'quv markazi sayti ishga tushdi: http://localhost:${PORT}`);
-    console.log(`📊 Admin panel: http://localhost:${PORT}/admin.html`);
-    console.log(`🔐 Admin standart parol: ${ADMIN_PASSWORD}`);
+    console.log(`🚀 STATUS ACADEMY sayti ishga tushdi: http://localhost:${PORT}`);
+    console.log(`📊 Web Admin panel: http://localhost:${PORT}/admin.html`);
+    console.log(`🤖 Telegram CRM Bot: @Status_lid_bot faol`);
     console.log(`⏰ 42% Grant yakunlanish vaqti: ${DEADLINE_ISO}`);
     console.log(`=================================================`);
   });
