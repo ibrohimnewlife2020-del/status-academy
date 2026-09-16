@@ -48,53 +48,8 @@ function initLiveClock() {
 let targetDeadline = new Date('2026-09-16T17:42:00').getTime();
 
 async function initCountdown() {
-  // Configdan deadline olish
-  try {
-    const res = await fetch('/api/config');
-    if (res.ok) {
-      const data = await res.json();
-      if (data.deadline) {
-        targetDeadline = new Date(data.deadline).getTime();
-      }
-    }
-  } catch (err) {
-    console.warn('Config yuklashda xatolik, standart deadline ishlatiladi:', err);
-  }
-
   const daysEl = document.getElementById('timerDays');
-  const hoursEl = document.getElementById('timerHours');
-  const minutesEl = document.getElementById('timerMinutes');
-  const secondsEl = document.getElementById('timerSeconds');
-  const urgentNoticeEl = document.getElementById('urgentCountdownText');
-
-  function updateTimer() {
-    const now = new Date().getTime();
-    const diff = targetDeadline - now;
-
-    if (diff <= 0) {
-      if (daysEl) daysEl.innerText = '00';
-      if (hoursEl) hoursEl.innerText = '00';
-      if (minutesEl) minutesEl.innerText = '00';
-      if (secondsEl) secondsEl.innerText = '00';
-      if (urgentNoticeEl) {
-        urgentNoticeEl.innerHTML = '<span class="text-yellow-400 font-bold">⚠️ Asosiy muddat yakunlandi, lekin zaxira o\'rinlar uchun ariza topshirishingiz mumkin!</span>';
-      }
-      return;
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    if (daysEl) daysEl.innerText = String(days).padStart(2, '0');
-    if (hoursEl) hoursEl.innerText = String(hours).padStart(2, '0');
-    if (minutesEl) minutesEl.innerText = String(minutes).padStart(2, '0');
-    if (secondsEl) secondsEl.innerText = String(seconds).padStart(2, '0');
-  }
-
-  updateTimer();
-  setInterval(updateTimer, 1000);
+  if (!daysEl) return; // Taymer olib tashlangan bo'lsa to'xtash
 }
 
 // 3. O'zbekiston telefon raqami maskasi (+998 (XX) XXX-XX-XX)
@@ -205,13 +160,13 @@ function initRegistrationForm() {
       if (!success && window.TELEGRAM_CONFIG && window.TELEGRAM_CONFIG.BOT_TOKEN && window.TELEGRAM_CONFIG.CHAT_ID) {
         try {
           const nowStr = new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' });
-          const tgMsg = `🔥 <b>STATUS ACADEMY — YANGI O'QUVCHI (42% GRANT)!</b>\n\n` +
+          const tgMsg = `🚀 <b>STATUS ACADEMY — YANGI O'QUVCHI (KAFOLATLI TA'LIM)!</b>\n\n` +
             `👤 <b>Ismi:</b> ${name}\n` +
             `📞 <b>Telefon:</b> <a href="tel:${phone}">${phone}</a>\n` +
             `📚 <b>Kurs:</b> ${course}\n` +
             `⏰ <b>Vaqt:</b> ${nowStr}\n` +
             `🆔 <b>Lid ID:</b> #${leadId}\n\n` +
-            `⚡️ <i>Tezda aloqaga chiqing va 42% grantni tasdiqlang! (+998-97-821-30-30)</i>`;
+            `⚡️ <i>Tezda aloqaga chiqing va kafolatli ta'lim o'rnini tasdiqlang! (+998-97-821-30-30)</i>`;
 
           const tgRes = await fetch(`https://api.telegram.org/bot${window.TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`, {
             method: 'POST',
@@ -258,7 +213,7 @@ function initRegistrationForm() {
       showError(err.message || 'Xatolik yuz berdi. Iltimos qayta urinib ko\'ring.');
     } finally {
       submitBtn.disabled = false;
-      btnText.innerText = "🔥 42% GRANTNI BAND QILISH";
+      btnText.innerText = "🚀 KAFOLATLI TA'LIMGA ARIZA";
       btnSpinner.classList.add('hidden');
     }
   });
