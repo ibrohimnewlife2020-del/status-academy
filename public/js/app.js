@@ -156,8 +156,8 @@ function initRegistrationForm() {
         // Server mavjud emas (statik xostingda)
       }
 
-      // 2. Agar server bo'lmasa, to'g'ridan-to'g'ri Telegram Bot orqali yuborish (100% bepul serversiz)
-      if (!success && window.TELEGRAM_CONFIG && window.TELEGRAM_CONFIG.BOT_TOKEN && window.TELEGRAM_CONFIG.CHAT_ID) {
+      // 2. Agar server bo'lmasa, to'g'ridan-to'g'ri Telegram Bot orqali barcha adminlarga yuborish
+      if (!success && window.TELEGRAM_CONFIG && window.TELEGRAM_CONFIG.BOT_TOKEN) {
         try {
           const nowStr = new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' });
           const tgMsg = `🚀 <b>STATUS ACADEMY — YANGI O'QUVCHI (KAFOLATLI TA'LIM)!</b>\n\n` +
@@ -168,18 +168,22 @@ function initRegistrationForm() {
             `🆔 <b>Lid ID:</b> #${leadId}\n\n` +
             `⚡️ <i>Tezda aloqaga chiqing va kafolatli ta'lim o'rnini tasdiqlang! (+998-97-821-30-30)</i>`;
 
-          const tgRes = await fetch(`https://api.telegram.org/bot${window.TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: window.TELEGRAM_CONFIG.CHAT_ID,
-              text: tgMsg,
-              parse_mode: 'HTML'
-            })
-          });
-
-          if (tgRes.ok) {
-            success = true;
+          const adminTargets = window.TELEGRAM_CONFIG.ADMIN_CHAT_IDS || [window.TELEGRAM_CONFIG.CHAT_ID];
+          for (const targetId of adminTargets) {
+            try {
+              const tgRes = await fetch(`https://api.telegram.org/bot${window.TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  chat_id: targetId,
+                  text: tgMsg,
+                  parse_mode: 'HTML'
+                })
+              });
+              if (tgRes.ok) success = true;
+            } catch (err) {
+              console.error(`Admin ${targetId} ga yuborishda xatolik:`, err);
+            }
           }
         } catch (tgErr) {
           console.error('Telegramga yuborishda xatolik:', tgErr);
