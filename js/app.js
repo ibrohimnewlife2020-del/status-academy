@@ -210,6 +210,9 @@ function initRegistrationForm() {
       if (modalLeadId) modalLeadId.innerText = leadId;
       if (successModal) successModal.classList.remove('hidden');
 
+      // Meta Pixel: Lead hodisasi
+      if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: course });
+
       // Konfetti otish
       launchConfetti();
 
