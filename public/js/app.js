@@ -166,7 +166,7 @@ function initRegistrationForm() {
             `📚 <b>Kurs:</b> ${course}\n` +
             `⏰ <b>Vaqt:</b> ${nowStr}\n` +
             `🆔 <b>Lid ID:</b> #${leadId}\n\n` +
-            `⚡️ <i>Tezda aloqaga chiqing va kafolatli ta'lim o'rnini tasdiqlang! (+998-97-821-30-30)</i>`;
+            `⚡️ <i>Tezda aloqaga chiqing va kafolatli ta'lim o'rnini tasdiqlang! (+998-87-026-00-66)</i>`;
 
           const adminTargets = window.TELEGRAM_CONFIG.ADMIN_CHAT_IDS || [window.TELEGRAM_CONFIG.CHAT_ID];
           for (const targetId of adminTargets) {

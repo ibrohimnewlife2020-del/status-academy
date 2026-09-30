@@ -431,7 +431,7 @@ function handleUpdate(update) {
         `📵 <b>Javob bermaganlar:</b> ${javob} ta\n` +
         `🎓 <b>O'quvchi bo'lganlar:</b> ${oquvchi} ta\n` +
         `❌ <b>Rad etganlar:</b> ${rad} ta\n\n` +
-        `📞 Markaz: +998-97-821-30-30`;
+        `📞 Markaz: +998-87-026-00-66`;
 
       sendTelegramMessage(chatId, statsMsg, BOT_MENU_KEYBOARD);
       return;
