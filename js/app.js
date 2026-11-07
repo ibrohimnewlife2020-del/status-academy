@@ -154,7 +154,7 @@ function initRegistrationForm() {
           errorMsg = crmData.error || '';
         }
       } catch (crmErr) {
-        // CRM vaqtincha ishlamasa — Telegram orqali yuboriladi
+        // CRM ga ulanib bo'lmadi — pastda xato ko'rsatiladi
       }
 
       // 1. Node.js server orqali yuborishga urinib ko'rish (eski usul, CRM ishlamasa)
@@ -176,40 +176,7 @@ function initRegistrationForm() {
         // Server mavjud emas (statik xostingda)
       }
 
-      // 2. Telegram Bot orqali adminlarga ham xabar (CRM ga tushgan bo'lsa ham — xabardor bo'lishsin)
-      if (!errorMsg && window.TELEGRAM_CONFIG && window.TELEGRAM_CONFIG.BOT_TOKEN) {
-        try {
-          const nowStr = new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' });
-          const tgMsg = `🚀 <b>STATUS ACADEMY — YANGI O'QUVCHI (10% CHEGIRMA)!</b>\n\n` +
-            `👤 <b>Ismi:</b> ${name}\n` +
-            `📞 <b>Telefon:</b> <a href="tel:${phone}">${phone}</a>\n` +
-            `📚 <b>Kurs:</b> ${course}\n` +
-            `⏰ <b>Vaqt:</b> ${nowStr}\n` +
-            `🆔 <b>Lid ID:</b> #${leadId}\n\n` +
-            `⚡️ <i>Tezda aloqaga chiqing — 10% chegirma bilan o'rnini tasdiqlang! (+998-87-026-00-66)</i>`;
-
-          const adminTargets = window.TELEGRAM_CONFIG.ADMIN_CHAT_IDS || [window.TELEGRAM_CONFIG.CHAT_ID];
-          for (const targetId of adminTargets) {
-            try {
-              const tgRes = await fetch(`https://api.telegram.org/bot${window.TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  chat_id: targetId,
-                  text: tgMsg,
-                  parse_mode: 'HTML'
-                })
-              });
-              if (tgRes.ok) success = true;
-            } catch (err) {
-              console.error(`Admin ${targetId} ga yuborishda xatolik:`, err);
-            }
-          }
-        } catch (tgErr) {
-          console.error('Telegramga yuborishda xatolik:', tgErr);
-        }
-      }
-
+      // (Telegram bot orqali xabar yuborish olib tashlandi — 2026-11-07, egasi so'ragan; kerak bo'lsa git tarixidan tiklanadi)
       // 3. Mahalliy brauzer xotirasiga ham nusxa saqlash (zaxira)
       try {
         const localLeads = JSON.parse(localStorage.getItem('status_academy_leads') || '[]');
@@ -217,8 +184,9 @@ function initRegistrationForm() {
         localStorage.setItem('status_academy_leads', JSON.stringify(localLeads));
       } catch (storageErr) {}
 
-      if (!success && errorMsg) {
-        throw new Error(errorMsg);
+      // Ariza CRM ga tushmagan bo'lsa — foydalanuvchiga aytamiz (lid yo'qolmasin)
+      if (!success) {
+        throw new Error(errorMsg || "Arizani yuborib bo'lmadi. Internetni tekshirib qayta urinib ko'ring yoki +998 87 026 00 66 raqamiga qo'ng'iroq qiling.");
       }
 
       // Muvaffaqiyatli yuborildi!
