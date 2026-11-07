@@ -137,8 +137,28 @@ function initRegistrationForm() {
       let success = false;
       let errorMsg = '';
 
-      // 1. Avval Node.js server orqali yuborishga urinib ko'rish
+      // 0. Status Academy CRM (edu.smartivecrm.uz) — lid "Instagramdan kelgan lidlar" bo'limiga tushadi
+      const honeypot = (document.getElementById('website') || {}).value || '';
       try {
+        const crmUrl = window.CRM_LEADS_URL || 'https://edu.smartivecrm.uz/api/public/leads/status-academy';
+        const crmRes = await fetch(crmUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, course, website: honeypot })
+        });
+        const crmData = await crmRes.json().catch(() => ({}));
+        if (crmRes.ok) {
+          leadId = crmData.leadId || leadId;
+          success = true;
+        } else if (crmRes.status === 400 || crmRes.status === 429) {
+          errorMsg = crmData.error || '';
+        }
+      } catch (crmErr) {
+        // CRM vaqtincha ishlamasa — Telegram orqali yuboriladi
+      }
+
+      // 1. Node.js server orqali yuborishga urinib ko'rish (eski usul, CRM ishlamasa)
+      if (!success) try {
         const response = await fetch('/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -156,17 +176,17 @@ function initRegistrationForm() {
         // Server mavjud emas (statik xostingda)
       }
 
-      // 2. Agar server bo'lmasa, to'g'ridan-to'g'ri Telegram Bot orqali barcha adminlarga yuborish
-      if (!success && window.TELEGRAM_CONFIG && window.TELEGRAM_CONFIG.BOT_TOKEN) {
+      // 2. Telegram Bot orqali adminlarga ham xabar (CRM ga tushgan bo'lsa ham — xabardor bo'lishsin)
+      if (!errorMsg && window.TELEGRAM_CONFIG && window.TELEGRAM_CONFIG.BOT_TOKEN) {
         try {
           const nowStr = new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' });
-          const tgMsg = `🚀 <b>STATUS ACADEMY — YANGI O'QUVCHI (KAFOLATLI TA'LIM)!</b>\n\n` +
+          const tgMsg = `🚀 <b>STATUS ACADEMY — YANGI O'QUVCHI (10% CHEGIRMA)!</b>\n\n` +
             `👤 <b>Ismi:</b> ${name}\n` +
             `📞 <b>Telefon:</b> <a href="tel:${phone}">${phone}</a>\n` +
             `📚 <b>Kurs:</b> ${course}\n` +
             `⏰ <b>Vaqt:</b> ${nowStr}\n` +
             `🆔 <b>Lid ID:</b> #${leadId}\n\n` +
-            `⚡️ <i>Tezda aloqaga chiqing va kafolatli ta'lim o'rnini tasdiqlang! (+998-87-026-00-66)</i>`;
+            `⚡️ <i>Tezda aloqaga chiqing — 10% chegirma bilan o'rnini tasdiqlang! (+998-87-026-00-66)</i>`;
 
           const adminTargets = window.TELEGRAM_CONFIG.ADMIN_CHAT_IDS || [window.TELEGRAM_CONFIG.CHAT_ID];
           for (const targetId of adminTargets) {
@@ -220,7 +240,7 @@ function initRegistrationForm() {
       showError(err.message || 'Xatolik yuz berdi. Iltimos qayta urinib ko\'ring.');
     } finally {
       submitBtn.disabled = false;
-      btnText.innerText = "🚀 KAFOLATLI TA'LIMGA ARIZA";
+      btnText.innerText = "🚀 10% CHEGIRMA BILAN RO'YXATDAN O'TISH";
       btnSpinner.classList.add('hidden');
     }
   });
