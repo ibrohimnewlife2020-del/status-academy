@@ -20,7 +20,6 @@ Ushbu loyiha ingliz tili o'quv markazi uchun maxsus ishlab chiqilgan bo'lib, o'q
    - Telefon raqami uchun `+998 (XX) XXX-XX-XX` avtomatik maskasi.
    - Ariza yuborilganda konfetti effekti va muvaffaqiyat modali.
 5. **Lidlarni Qabul Qilish (Lead Management)**:
-   - **Telegram Bot Integratsiyasi**: Har bir yangi lid haqida darhol ovozli/matnli bildirishnoma sizning Telegramingizga boradi.
    - **Admin Panel (`/admin.html`)**: Barcha lidlarni bir joyda ko'rish, qidirish, statusini o'zgartirish (Yangi, Bog'lanildi, To'lov qildi).
    - **Excel / CSV Yuklab Olish**: Barcha lidlarni 1 tugma orqali Excel jadvaliga eksport qilish.
 
@@ -41,21 +40,17 @@ node server.js
 Endi brauzerda oching:
 - **Asosiy sahifa:** [http://localhost:3000](http://localhost:3000)
 - **Admin panel:** [http://localhost:3000/admin.html](http://localhost:3000/admin.html)
-- **Standart admin parol:** `admin123`
+- **Admin parol:** standart parol yo'q. `.env` faylida `ADMIN_PASSWORD=` (kamida 8 belgi) yozing, aks holda admin panel o'chiq turadi.
 
 ---
 
-## 📱 Telegram Botni Ulash (Lidlarni Telegramda Qabul Qilish)
+## 🔐 Xavfsizlik
 
-1. Telegramda [@BotFather](https://t.me/BotFather) ga o'tib, `/newbot` buyrug'i bilan yangi bot yarating va **API Token** oling.
-2. [@userinfobot](https://t.me/userinfobot) ga `/start` yozib, o'zingizning **Telegram ID** (Chat ID) raqamingizni oling.
-3. `.env` faylini ochib, quyidagi qatorlarga o'z ma'lumotlaringizni yozing:
-   ```env
-   TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklmn...
-   TELEGRAM_CHAT_ID=987654321
-   ```
-4. Serverni qayta ishga tushiring:
-   ```bash
-   node server.js
-   ```
-Yangi o'quvchi ro'yxatdan o'tishi bilanoq, uning ismi, telefon raqami va tanlagan kursi sizning Telegramingizga yuboriladi!
+- Parol va kalitlar faqat `.env` faylida (GitHub'ga chiqmaydi) yoki hosting sozlamalarida turadi. Kodga yozilmaydi.
+- `.env` namunasi:
+  ```env
+  ADMIN_PASSWORD=kamida-8-belgili-kuchli-parol
+  SESSION_SECRET=uzun-tasodifiy-satr
+  ```
+- Saytdan kelgan arizalar asosan Status Academy CRM ga (edu.smartivecrm.uz) tushadi.
+- Telegram bot 2026-11 da butunlay olib tashlangan.
